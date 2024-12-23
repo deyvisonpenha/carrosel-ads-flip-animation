@@ -7,35 +7,73 @@ import {
 } from "@tabler/icons-react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import ControlledDotsNavigation from './controlledDotsNavigation';
 
 export const AnimatedProducts = ({ products }) => {
+  // State to track the currently active product index
   const [active, setActive] = useState(0);
+  // State to control autoplay functionality
   const [autoplay, setAutoplay] = useState(true);
+  const intervalRef = useRef(null); // Use a ref to store the interval ID
 
+
+  // Function to handle moving to the next product
   const handleNext = () => {
     setActive((prev) => (prev + 1) % products.length);
+    resetAutoplay(); // Reset autoplay after user interaction
   };
 
+
+  // Function to handle moving to the previous product
   const handlePrev = () => {
     setActive((prev) => (prev - 1 + products.length) % products.length);
+    resetAutoplay(); // Reset autoplay after user interaction
   };
 
+  // Function to check if a product is currently active
   const isActive = (index) => {
     return index === active;
   };
 
+
+  // Function to start the autoplay feature
+  const startAutoplay = () => {
+    intervalRef.current = setInterval(() => {
+      setActive((prev) => (prev + 1) % products.length);
+    }, 3000);
+  };
+
+   // Function to stop the autoplay feature
+   const stopAutoplay = () => {
+    clearInterval(intervalRef.current);
+    intervalRef.current = null;
+  };
+
+  // Function to reset the autoplay timer
+  const resetAutoplay = () => {
+    if (autoplay) {
+      stopAutoplay();
+      startAutoplay();
+    }
+  };
+
+  // Effect to start autoplay when the component mounts or autoplay state changes
   useEffect(() => {
     if (autoplay) {
-      const interval = setInterval(handleNext, 3000);
-      return () => clearInterval(interval);
+      startAutoplay();
     }
+    return () => stopAutoplay(); // Cleanup on component unmount
   }, [autoplay]);
 
+  // Function to toggle autoplay on button click
   const handleStop = () => {
-    setAutoplay((prev) => !prev);
-  }
+    setAutoplay((prev) => {
+      if (prev) stopAutoplay();
+      else startAutoplay();
+      return !prev;
+    });
+  };
 
   return (
     <div
@@ -112,11 +150,12 @@ export const AnimatedProducts = ({ products }) => {
         <ControlledDotsNavigation 
         currentIndex={active} 
         totalImages={products.length} 
-        onDotClick={setActive} 
+        onDotClick={(index) => {
+          setActive(index);
+          resetAutoplay(); // Reset autoplay after dot navigation
+        }} 
       />
       </div>
-
-      
     </div>
   );
 };
