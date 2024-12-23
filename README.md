@@ -14,8 +14,8 @@ To run this project locally, follow these steps:
 
 1. **Clone the repository**:
    ```bash
-   git clone <repository-url>
-   cd <repository-directory>
+   git clone https://github.com/deyvisonpenha/carrosel-ads-flip-animation.git
+   cd carrosel-ads-flip-animation
    ```
 
 2. **Install dependencies**:
@@ -31,6 +31,7 @@ To run this project locally, follow these steps:
 
 4. **Open your browser**:
    Navigate to `http://localhost:3000` to view the application.
+   For production environment navigate to `https://carrosel-ads-flip-animation.vercel.app/`
 
 ## Features
 - **Product Navigation**: Users can navigate through products using left/right arrows or by clicking on dots.
