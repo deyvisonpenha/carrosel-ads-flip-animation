@@ -37,9 +37,7 @@ To run this project locally, follow these steps:
 - **Product Navigation**: Users can navigate through products using left/right arrows or by clicking on dots.
 - **Autoplay**: The product showcase can automatically transition between products at a specified interval.
 - **Responsive Design**: The application is designed to be responsive, providing a good user experience on both mobile and desktop devices.
-
-## Contributing
-Contributions are welcome! Please open an issue or submit a pull request for any enhancements or bug fixes.
+- **Theme Support**: The application supports both dark and light modes for a personalized user experience.
 
 ## License
 This project is licensed under the MIT License.
