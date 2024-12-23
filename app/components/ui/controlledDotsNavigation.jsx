@@ -7,7 +7,7 @@ const ControlledDotsNavigation = ({ currentIndex, totalImages, onDotClick }) => 
             {Array.from({ length: totalImages }).map((_, index) => (
                 <button
                     key={index}
-                    className={`w-3 h-3 rounded-full ${currentIndex === index ? 'bg-blue-500' : 'bg-gray-300'}`}
+                    className={`w-3 h-3 rounded-full ${currentIndex === index ? 'bg-blue-500' : 'bg-gray-300'} hover:animate-pulse `}
                     onClick={() => onDotClick(index)}
                 />
             ))}

@@ -45,7 +45,7 @@ export const AnimatedProducts = ({ products }) => {
       <h1 className="text-3xl font-bold text-center text-blue-600 mb-4">
         Product Showcase
       </h1>
-      <div className="relative h-80 w-full shadow-lg rounded-lg overflow-hidden">
+      <div className="relative h-80 w-full rounded-lg overflow-hidden">
         <AnimatePresence>
           {products.map(
             (product, index) =>
