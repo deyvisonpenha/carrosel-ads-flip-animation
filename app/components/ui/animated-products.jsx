@@ -1,18 +1,18 @@
 "use client";
-import { IconArrowLeft, IconArrowRight } from "@tabler/icons-react";
+import {
+  IconArrowLeft,
+  IconArrowRight,
+  IconPlayerPlay,
+  IconPlayerStop,
+} from "@tabler/icons-react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import ControlledDotsNavigation from './controlledDotsNavigation';
 
-export const AnimatedProducts = ({ products, autoplay = false }) => {
+export const AnimatedProducts = ({ products }) => {
   const [active, setActive] = useState(0);
-  const [randomRotations, setRandomRotations] = useState([]);
-
-  useEffect(() => {
-    // Generate random rotations once on mount
-    const rotations = products.map(() => Math.floor(Math.random() * 21) - 10);
-    setRandomRotations(rotations);
-  }, [products]);
+  const [autoplay, setAutoplay] = useState(true);
 
   const handleNext = () => {
     setActive((prev) => (prev + 1) % products.length);
@@ -33,64 +33,90 @@ export const AnimatedProducts = ({ products, autoplay = false }) => {
     }
   }, [autoplay]);
 
+  const handleStop = () => {
+    setAutoplay((prev) => !prev);
+  }
+
   return (
     <div
       className="max-w-sm md:max-w-4xl mx-auto antialiased px-4 md:px-8 lg:px-12 py-20 font-[family-name:var(--font-geist-sans)]"
-      style={{ perspective: "1000px" }} // Add perspective for 3D effect
+      style={{ perspective: "1000px" }}
     >
-      <h1 className="text-3xl font-bold text-center text-blue-600 mb-4">Product Showcase</h1>
+      <h1 className="text-3xl font-bold text-center text-blue-600 mb-4">
+        Product Showcase
+      </h1>
       <div className="relative h-80 w-full shadow-lg rounded-lg overflow-hidden">
         <AnimatePresence>
-          {products.map((product, index) => (
-            isActive(index) && (
-              <motion.div
-                key={product.src}
-                initial={{
-                  opacity: 0,
-                  rotateY: -90, // Flip in from the left
-                }}
-                animate={{
-                  opacity: 1,
-                  rotateY: 0, // Reset rotation to face the front
-                }}
-                exit={{
-                  opacity: 0,
-                  rotateY: 90, // Flip out to the right
-                }}
-                transition={{
-                  duration: 0.5,
-                  ease: "easeInOut",
-                }}
-                className="absolute inset-0 origin-center"
-              >
-                <Image
-                  src={product.src}
-                  alt={product.name}
-                  width={500}
-                  height={500}
-                  draggable={false}
-                  className="h-full w-full rounded-3xl object-cover object-center"
-                />
-              </motion.div>
-            )
-          ))}
+          {products.map(
+            (product, index) =>
+              isActive(index) && (
+                <motion.div
+                  key={product.src}
+                  initial={{
+                    opacity: 0,
+                    rotateY: -90,
+                  }}
+                  animate={{
+                    opacity: 1,
+                    rotateY: 0,
+                  }}
+                  exit={{
+                    opacity: 0,
+                    rotateY: 90,
+                  }}
+                  transition={{
+                    duration: 0.5,
+                    ease: "easeInOut",
+                  }}
+                  className="absolute inset-0 origin-center"
+                >
+                  <Image
+                    src={product.src}
+                    alt={product.name}
+                    width={500}
+                    height={500}
+                    draggable={false}
+                    className="h-full w-full rounded-3xl object-cover object-center"
+                  />
+                </motion.div>
+              )
+          )}
         </AnimatePresence>
       </div>
 
-      <div className="flex gap-4 mt-3 md:mt-8">
+      <div className="flex flex-1 mt-3 md:mt-8 justify-between items-center">
+        <div className="flex gap-4">
+          <button
+            onClick={handlePrev}
+            className="h-7 w-7 rounded-full bg-gray-100 dark:bg-neutral-800 flex items-center justify-center group/button"
+          >
+            <IconArrowLeft className="h-5 w-5 text-black dark:text-neutral-400 group-hover/button:scale-125 transition-transform duration-300" />
+          </button>
+          <button
+            onClick={handleNext}
+            className="h-7 w-7 rounded-full bg-gray-100 dark:bg-neutral-800 flex items-center justify-center group/button"
+          >
+            <IconArrowRight className="h-5 w-5 text-black dark:text-neutral-400 group-hover/button:scale-125 transition-transform duration-300" />
+          </button>
+        </div>
         <button
-          onClick={handlePrev}
+          onClick={handleStop}
           className="h-7 w-7 rounded-full bg-gray-100 dark:bg-neutral-800 flex items-center justify-center group/button"
         >
-          <IconArrowLeft className="h-5 w-5 text-black dark:text-neutral-400 group-hover/button:rotate-12 transition-transform duration-300" />
+          {autoplay ? (
+            <IconPlayerStop className="h-5 w-5 text-black dark:text-neutral-400 group-hover/button:scale-125 transition-transform duration-300" />
+          ) : (
+            <IconPlayerPlay className="h-5 w-5 text-black dark:text-neutral-400 group-hover/button:scale-125 transition-transform duration-300" />
+          )}
         </button>
-        <button
-          onClick={handleNext}
-          className="h-7 w-7 rounded-full bg-gray-100 dark:bg-neutral-800 flex items-center justify-center group/button"
-        >
-          <IconArrowRight className="h-5 w-5 text-black dark:text-neutral-400 group-hover/button:-rotate-12 transition-transform duration-300" />
-        </button>
+        <ControlledDotsNavigation 
+        currentIndex={active} 
+        totalImages={products.length} 
+        onDotClick={setActive} 
+      />
       </div>
+
+      
     </div>
   );
 };
